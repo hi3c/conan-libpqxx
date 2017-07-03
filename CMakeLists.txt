@@ -38,6 +38,7 @@ add_library(pqxx
 target_include_directories(pqxx PUBLIC
   ${CMAKE_SOURCE_DIR}/include
   $<$<CXX_COMPILER_ID:MSVC>:${CMAKE_SOURCE_DIR}/config/sample-headers/compiler/VisualStudio2013>
+  $<$<CXX_COMPILER_ID:GNU>:${CMAKE_SOURCE_DIR}/config/sample-headers/compiler/gcc-4.4>
 )
 
 target_link_libraries(pqxx PUBLIC CONAN_PKG::libpq)
@@ -45,8 +46,17 @@ target_link_libraries(pqxx PUBLIC CONAN_PKG::libpq)
 target_compile_options(pqxx PUBLIC $<$<CXX_COMPILER_ID:MSVC>:/wd4100 /wd4267>)
 
 target_compile_definitions(pqxx PUBLIC
+  PQXX_HAVE_STD_ISNAN
+  PQXX_HAVE_STD_ISINF
+  PQXX_HAVE_SHARED_PTR
+
   $<$<BOOL:${BUILD_SHARED_LIBS}>:PQXX_SHARED>
   $<$<PLATFORM_ID:Windows>:WIN32 _MBCS _WINDOWS>
 )
 
-set_target_properties(pqxx PROPERTIES PREFIX "lib" IMPORT_PREFIX "lib")
+set_target_properties(pqxx PROPERTIES
+  PREFIX "lib"
+  IMPORT_PREFIX "lib"
+  CXX_STANDARD 14
+  CXX_STANDARD_REQUIRED TRUE
+)

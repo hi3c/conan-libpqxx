@@ -4,7 +4,7 @@ import shutil
 
 class LibpqxxConan(ConanFile):
     name = "libpqxx"
-    version = "5.0.1"
+    version = "5.0.1_1"
     license = "<Put the package license here>"
     url = "<Package recipe repository url here, for issues about the package>"
     settings = "os", "compiler", "build_type", "arch"
@@ -29,10 +29,13 @@ class LibpqxxConan(ConanFile):
     def package(self):
         self.copy("*", src="libpqxx-5.0.1/include", dst="include")
         self.copy("*", src="libpqxx-5.0.1/config/sample-headers/compiler/VisualStudio2013", dst="include")
-        self.copy("*.dll", src="bin", dst="bin")
         self.copy("*.lib", src="lib", dst="lib")
-        self.copy("*.a", src="lib", dst="lib")
-        self.copy("*.so", src="lib", dst="lib")
+        if self.options.shared:
+            self.copy("*.dll", src="bin", dst="bin")
+            self.copy("*.so*", src=".", dst="lib")
+            self.copy("*.dylib", src=".", dst="lib")
+        else:
+            self.copy("*.a", src=".", dst="lib")
 
     def package_info(self):
         self.cpp_info.libs = ["pqxx"]
