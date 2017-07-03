@@ -12,7 +12,7 @@ class LibpqxxConan(ConanFile):
     default_options = "shared=True"
     generators = "cmake"
     exports = "CMakeLists.txt"
-    requires = "libpq/9.6.3@hi3c/experimental"
+    requires = "libpq/9.6.3_1@hi3c/experimental"
 
     def source(self):
         tools.download("https://github.com/jtv/libpqxx/archive/5.0.1.tar.gz", "libpqxx.tar.gz")
